@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from starlette.responses import Response, JSONResponse
 from deta import Deta
 
-import os
+import os, uuid
 
 from firebase import firebase_app
 
@@ -36,4 +36,4 @@ def read_db():
 def get_storage(path: str):
     storage = firebase_app.storage()
     data = storage.child(str(path))
-    return JSONResponse(content={"url": data.get_url()}, status_code=200)
+    return JSONResponse(content={"url": data.get_url(token=None)}, status_code=200)
