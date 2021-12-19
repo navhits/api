@@ -1,0 +1,28 @@
+name: Deploy to Deta
+on: workflow_dispatch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Deta CLI
+        shell: bash
+        run: |
+          curl -fsSL https://get.deta.dev/cli.sh | sh
+      
+      - name: Deploy to Deta
+        shell: bash
+        run: |
+          env | grep -E 'FIREBASE_|DETA_' > .env
+          export DETA_ACCESS_TOKEN=${{ secrets.ACCESS_TOKEN_DETA }}
+          ~/.deta/bin/deta clone --name ${{ secrets.MICRO_NAME_DETA }} --project ${{ secrets.PROJECT_NAME_DETA }} tmp/
+          cp -r tmp/.deta .
+          ~/.deta/bin/deta update -e .env
+          ~/.deta/bin/deta deploy
+        env:
+          DETA_PROJECT_KEY: ${{ secrets.DETA_PROJECT_KEY }}
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY }}
+          FIREBASE_SERVICE_ACCOUNT_CLIENT_ID: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CLIENT_ID }}
+          
