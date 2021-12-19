@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from starlette.responses import Response
+from starlette.responses import Response, JSONResponse
 from deta import Deta
 
 import os
@@ -30,9 +30,10 @@ def root():
 def read_db():
     data = db.get(key="1")
     data.pop("key")
-    return Response(content=data, status_code=200)
+    return JSONResponse(content=data, status_code=200)
 
 @app.get("/storage")
 def get_storage(path: str):
     storage = firebase_app.storage()
-    return Response(content=storage.child(path), status_code=200)
+    data = storage.child(str(path))
+    return JSONResponse(content={"url": data.get_url()}, status_code=200)
