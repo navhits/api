@@ -31,3 +31,8 @@ def read_db():
     data = db.get(key="1")
     data.pop("key")
     return Response(content=data, status_code=200)
+
+@app.get("/storage")
+def get_storage(path: str):
+    storage = firebase_app.storage()
+    return Response(content=storage.child(path), status_code=200)
