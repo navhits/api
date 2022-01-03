@@ -2,7 +2,7 @@ from fastapi import FastAPI, Depends, BackgroundTasks
 from starlette.responses import Response, JSONResponse
 
 from api.auth import APIKeyAuth
-from api.deta_base import pull_db, update_db
+from api.deta_base import pull_db, update_db, is_db_alive
 from api.firebase import get_storage_url
 from api.schema import Info, Storage, StorageError
 
@@ -28,7 +28,26 @@ def shutdown():
 
 @app.get("/")
 def root():
+    """
+    Generic root endpoint
+    """
     return Response(status_code=200)
+
+@app.get("/health/api", tags=["Health"], responses={200: {"message": "Alive"}})
+def api_health():
+    """
+    Endpoint to check if the API is alive
+    """
+    return Response(status_code=200)
+
+@app.get("/health/db", tags=["Health"], responses={200: {"message": "Alive"}, 500: {"message": "Dead"}})
+def db_health():
+    """
+    Endpoint to check if the DB is alive
+    """
+    if is_db_alive():
+        return Response(status_code=200)
+    return Response(status_code=500)
 
 @app.get("/info", tags=["Info"], response_model=Info)
 def read_my_info() -> dict:

@@ -7,6 +7,14 @@ from api.firebase import get_from_realtimedb
 
 deta = Deta(project_key=os.getenv('DETA_PROJECT_KEY'))
 
+
+def is_db_alive():
+    db = deta.Base(os.getenv('FIREBASE_PROJECT_ID'))
+    data = db.get(key="1")
+    if data:
+        return True
+    return False
+
 def pull_db():
     db = deta.Base(os.getenv('FIREBASE_PROJECT_ID'))
     data = db.get(key="1")
