@@ -15,6 +15,7 @@ jobs:
         run: |
           curl -fsSL https://get.deta.dev/cli.sh | sh
       
+      - uses: actions/checkout@v2
       - name: Deploy to Deta
         shell: bash
         run: |
