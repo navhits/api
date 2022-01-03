@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, BackgroundTasks
 from starlette.responses import Response, JSONResponse
 
 from api.auth import APIKeyAuth
@@ -40,14 +40,13 @@ def read_my_info() -> dict:
     return JSONResponse(content=data, status_code=200)
 
 @app.get("/info/refresh", tags=["info"], response_model=Info)
-def refresh_my_info(auth: str = Depends(AuthClass.authenticate)) -> dict:
+def refresh_my_info(background_tasks: BackgroundTasks, auth: str = Depends(AuthClass.authenticate)) -> dict:
     """
     Refreshes the database and returns the data
     """
     if auth:
-        data = update_db()
-        data.pop("key")
-        return JSONResponse(content=data, status_code=200)
+        background_tasks.add_task(update_db)
+        return JSONResponse(status_code=202)
 
 @app.get("/storage", tags=["Storage"], responses={404: {"model": StorageError}, 200: {"model": Storage}})
 def get_path_from_storage(path: str)  -> dict:
