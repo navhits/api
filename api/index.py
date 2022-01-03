@@ -39,7 +39,7 @@ def read_my_info() -> dict:
     data.pop("key")
     return JSONResponse(content=data, status_code=200)
 
-@app.get("/info/refresh", tags=["info"], response_model=Info)
+@app.get("/info/refresh", tags=["info"], responses={202: {"message": "Accepted"}})
 def refresh_my_info(background_tasks: BackgroundTasks, auth: str = Depends(AuthClass.authenticate)) -> dict:
     """
     Refreshes the database and returns the data
