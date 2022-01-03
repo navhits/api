@@ -20,3 +20,10 @@ jobs:
         run: |
           pip install pytest
           pytest --disable-warnings
+        env:
+          API_TOKEN: ${{ secrets.API_TOKEN }}
+          DETA_PROJECT_KEY: ${{ secrets.DETA_PROJECT_KEY }}
+          FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY }}
+          FIREBASE_SERVICE_ACCOUNT_CLIENT_ID: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CLIENT_ID }}
