@@ -1,24 +1,19 @@
-import requests
-import pyrebase
+import firebase_admin as firebase
+from firebase_admin import db, storage
 from api.config import config
 
-firebase_app = pyrebase.initialize_app(config)
+cred = firebase.credentials.Certificate(config['serviceAccount'])
+app = firebase.initialize_app(cred, config['options'], config['options']['projectId'])
 
 def get_from_realtimedb():
-    realtime_db = firebase_app.database()
+    realtime_db = db.reference(path='/', app=app)
     data = realtime_db.get()
-    return dict(data.val())
+    return data
 
 def get_storage_url(path):
-    storage = firebase_app.storage()
-    data = storage.child(str(path))
-    url = data.get_url(token=None)
-    if verify_content(url):
-        return url
+    bucket = storage.bucket(app=app)
+    blob = bucket.get_blob(path)
+    if blob:
+        blob.make_public()
+        return blob.public_url
     return None
-
-def verify_content(url):
-    res = requests.get(url)
-    if res.status_code == 200:
-        return True
-    return False
