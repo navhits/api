@@ -2,12 +2,13 @@ name: Deploy to Deta
 on: 
   workflow_dispatch:
   workflow_run:
-    workflows: ["Run Tests"]
+    workflows: ["CodeQL"]
     types:
       - completed
 
 jobs:
   deploy:
+    name: Deployment
     runs-on: ubuntu-latest
     steps:
       - name: Install Deta CLI
