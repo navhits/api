@@ -33,12 +33,12 @@ def root():
     """
     return Response(status_code=200)
 
-@app.get("/health/api", tags=["Health"], responses={200: {"message": "Alive"}})
+@app.get("/health/api", tags=["Health"], responses={200: {"message": "Alive"}, 500: {"message": "Dead"}})
 def api_health():
     """
     Endpoint to check if the API is alive
     """
-    return Response(status_code=200)
+    return JSONResponse(content={"message": "Alive"}, status_code=200)
 
 @app.get("/health/db", tags=["Health"], responses={200: {"message": "Alive"}, 500: {"message": "Dead"}})
 def db_health():
@@ -46,8 +46,8 @@ def db_health():
     Endpoint to check if the DB is alive
     """
     if is_db_alive():
-        return Response(status_code=200)
-    return Response(status_code=500)
+        return JSONResponse(content={"message": "Alive"}, status_code=200)
+    return JSONResponse(content={"message": "Dead"}, status_code=500)
 
 @app.get("/info", tags=["Info"], response_model=Info)
 def read_my_info() -> dict:
@@ -65,7 +65,7 @@ def refresh_my_info(background_tasks: BackgroundTasks, auth: str = Depends(AuthC
     """
     if auth:
         background_tasks.add_task(update_db)
-        return JSONResponse(status_code=202)
+        return Response(status_code=202)
 
 @app.get("/storage", tags=["Storage"], responses={404: {"model": StorageError}, 200: {"model": Storage}})
 def get_path_from_storage(path: str)  -> dict:
