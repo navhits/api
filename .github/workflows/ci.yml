@@ -21,14 +21,9 @@ jobs:
         run: |
           pip install pytest
           export RESULT=$(pytest -q)
-          JSON_BODY=$(python -c "import json, os; print(json.dumps({'body':os.getenv('RESULT')}))") 
-          PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
-          curl \
-          -X POST \
-          -H "Accept: application/vnd.github.v3+json" \
-          -H "Authorization: Bearer ${{ github.token }}" \
-          $GITHUB_API_URL/repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments \
-          -d $JSON_BODY
+          export PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
+          export GH_TOKEN=${{ github.token }}
+          python scripts/comment_pr.py
         
         env:
           API_TOKEN: ${{ secrets.API_TOKEN }}
