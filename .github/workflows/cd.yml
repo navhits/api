@@ -1,9 +1,14 @@
 name: Deploy to Deta
-on: 
-  workflow_dispatch:
+on:
   push:
+    paths-ignore:
+        - '.github/workflows/ci.yml'
+        - '.github/workflows/codeql.yml'
+        - 'README.md'
+        - 'tests/**'
     branches:
       - main
+    
 
 jobs:
   deploy:

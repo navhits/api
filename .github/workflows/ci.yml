@@ -11,7 +11,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.x'
+          python-version: '3.9'
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -20,7 +20,11 @@ jobs:
       - name: Test with pytest
         run: |
           pip install pytest
-          pytest --disable-warnings
+          export RESULT=$(pytest -q)
+          export PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
+          export GH_TOKEN=${{ github.token }}
+          python scripts/comment_pr.py
+        
         env:
           API_TOKEN: ${{ secrets.API_TOKEN }}
           DETA_PROJECT_KEY: ${{ secrets.DETA_PROJECT_KEY }}
@@ -28,28 +32,3 @@ jobs:
           FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
           FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY }}
           FIREBASE_SERVICE_ACCOUNT_CLIENT_ID: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CLIENT_ID }}
-  
-  analyze:
-    needs: test
-    name: Security test
-    runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
-
-    strategy:
-      fail-fast: false
-      matrix:
-        language: [ 'python' ]
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v1
-      with:
-        languages: ${{ matrix.language }}
-
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v1
