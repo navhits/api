@@ -80,16 +80,17 @@ def get_path_from_storage(path: str)  -> dict:
     return JSONResponse(content={"error":"Path not found"}, status_code=404)
 
 @app.post("/drive/upload", tags=["Drive"], responses={404: {"model": DriveError}, 200: {"model": Drive}})
-def upload_to_drive(file: UploadFile = File(...)) -> dict:
+def upload_to_drive(file: UploadFile = File(...), auth: str = Depends(AuthClass.authenticate)) -> dict:
     """
     Upload the file to the drive
     """
     name = file.filename
     f = file.file
-    upload = put_to_drive(name, f)
-    if upload:
-        return JSONResponse(content={"url":f"https://api.navs.page/drive/download/{name}"}, status_code=200)
-    return JSONResponse(content={"error":"Unable to upload"}, status_code=500)
+    if auth:
+        upload = put_to_drive(name, f)
+        if upload:
+            return JSONResponse(content={"url":f"https://api.navs.page/drive/download/{name}"}, status_code=200)
+        return JSONResponse(content={"error":"Unable to upload"}, status_code=500)
 
 @app.get("/drive/download/{name}", tags=["Drive"], responses={404: {"model": DriveError}})
 def download_from_drive(name: str) -> StreamingResponse:
