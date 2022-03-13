@@ -91,7 +91,7 @@ def upload_to_drive(file: UploadFile = File(...)) -> dict:
         return JSONResponse(content={"url":f"https://api.navs.page/drive/download/{name}"}, status_code=200)
     return JSONResponse(content={"error":"Unable to upload"}, status_code=500)
 
-@app.get("/drive/download/{name}", tags=["Drive"], responses={404: {"model": DriveError}, 200: {"model": StreamingResponse}})
+@app.get("/drive/download/{name}", tags=["Drive"], responses={404: {"model": DriveError}})
 def download_from_drive(name: str) -> StreamingResponse:
     """
     Downloads the file from drive
