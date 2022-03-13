@@ -1,5 +1,7 @@
 name: Deploy to Deta
 on:
+  workflow_dispatch:
+    
   push:
     paths-ignore:
         - '.github/workflows/ci.yml'
