@@ -11,5 +11,11 @@ class Info(pydantic.BaseModel):
 class Storage(pydantic.BaseModel):
     url: str
 
+class Drive(pydantic.BaseModel):
+    url: str
+
 class StorageError(pydantic.BaseModel):
+    error: str
+
+class DriveError(pydantic.BaseModel):
     error: str
