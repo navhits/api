@@ -1,10 +1,10 @@
 from fastapi import FastAPI, Depends, BackgroundTasks, File, UploadFile
 from starlette.responses import Response, JSONResponse
-from fastapi.responses import HTMLResponse, StreamingResponse
+from fastapi.responses import StreamingResponse
 
 from api.auth import APIKeyAuth
 from api.deta_base import pull_db, update_db, is_db_alive
-from api.deta_drive import get_from_drive, put_to_drive
+from api.deta_drive import get_from_drive, put_to_drive, delete_from_drive
 from api.firebase import get_storage_url
 from api.schema import Info, Storage, StorageError, Drive, DriveError
 
@@ -87,6 +87,8 @@ def upload_to_drive(file: UploadFile = File(...), auth: str = Depends(AuthClass.
     name = file.filename
     f = file.file
     if auth:
+        if get_from_drive(name):
+            delete_from_drive(name)
         upload = put_to_drive(name, f)
         if upload:
             return JSONResponse(content={"url":f"https://api.navs.page/drive/download/{name}"}, status_code=200)

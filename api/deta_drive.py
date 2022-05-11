@@ -20,3 +20,12 @@ def put_to_drive(name, data):
         return True
     except Exception:
         return False
+
+def delete_from_drive(name):
+    drive = deta.Drive("static")
+    try:
+        drive.delete(name=name)
+        return True
+    except Exception:
+        return False
+    
