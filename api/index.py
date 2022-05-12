@@ -1,4 +1,3 @@
-from email import header
 from fastapi import FastAPI, Depends, BackgroundTasks, File, UploadFile
 from starlette.responses import Response, JSONResponse
 from fastapi.responses import StreamingResponse
@@ -102,6 +101,6 @@ def download_from_drive(name: str) -> StreamingResponse:
     """
     data = get_from_drive(name)
     if data:
-        return StreamingResponse(data.iter_chunks(1024), media_type="application/pdf",
+        return StreamingResponse(data.iter_chunks(1024), media_type="application/pdf",  
                                  headers={"Cache-Control": "no-cache"})
     return JSONResponse(content={"error":"File not found"}, status_code=404)
