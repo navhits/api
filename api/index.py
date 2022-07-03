@@ -101,6 +101,6 @@ def download_from_drive(name: str) -> StreamingResponse:
     """
     data = get_from_drive(name)
     if data:
-        return StreamingResponse(data.iter_chunks(1024), media_type="application/pdf",  
+        return StreamingResponse(data.iter_chunks(1024), media_type="application/octet-stream",  
                                  headers={"Cache-Control": "no-cache"})
     return JSONResponse(content={"error":"File not found"}, status_code=404)
