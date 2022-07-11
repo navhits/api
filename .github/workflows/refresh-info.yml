@@ -1,0 +1,16 @@
+name: Refresh Info
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Refresh
+    runs-on: ubuntu-latest
+    steps:
+      - name: Request
+        shell: bash
+        run: |
+          curl -X 'GET' \
+          'https://api.navs.page/info/refresh' \
+          -H 'accept: application/json' \
+          -H 'x-api-key: ${{ secrets.API_TOKEN }}'

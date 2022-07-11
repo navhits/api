@@ -5,6 +5,7 @@ on:
   push:
     paths-ignore:
         - '.github/workflows/ci.yml'
+        - '.github/workflows/refresh-info.yml'
         - '.github/workflows/codeql.yml'
         - 'README.md'
         - 'tests/**'
