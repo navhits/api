@@ -4,7 +4,8 @@ cachetools==4.2.4
 certifi==2022.12.7
 charset-normalizer==2.0.9
 deta==1.0.1
-fastapi==0.70.1
+httpx==0.23.3
+fastapi==0.95.1
 firebase-admin==5.2.0
 google-api-core==2.3.2
 google-api-python-client==2.33.0
@@ -33,7 +34,7 @@ requests==2.27.0
 rsa==4.8
 six==1.16.0
 sniffio==1.2.0
-starlette==0.16.0
+starlette==0.26.1
 typing_extensions==4.0.1
 uritemplate==4.1.1
 urllib3==1.26.7
