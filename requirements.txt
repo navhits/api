@@ -23,12 +23,12 @@ idna==3.3
 msgpack==1.0.3
 packaging==21.3
 proto-plus==1.19.8
-protobuf==3.19.5
+protobuf==6.33.5
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pydantic==1.9.0
 pyparsing==3.0.6
-python-multipart==0.0.5
+python-multipart==0.0.22
 requests==2.27.0
 rsa==4.8
 six==1.16.0
